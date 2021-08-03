@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Test">
+	<select id="select">
+		SELECT survey_id, s_seq, st_mobile, answer, in_date, in_user_id, up_date, up_user_id from sresult
+	</select>
+	
+	<select id="select_graph">
+		select 
+		    survey_id, 
+		    s_seq, 
+		    question, 
+		    a1, 
+		    a2, 
+		    a3, 
+		    a4,
+		    (
+		    select count(*) from sresult r 
+		    where 
+		        d.survey_id = r.survey_id and
+		        d.s_seq = r.s_seq and
+		        r.answer = '1'
+		    ) c1,
+		    (
+		    select count(*) from sresult r 
+		    where 
+		        d.survey_id = r.survey_id and
+		        d.s_seq = r.s_seq and
+		        r.answer = '2'
+		    ) c2,
+		    (
+		    select count(*) from sresult r 
+		    where 
+		        d.survey_id = r.survey_id and
+		        d.s_seq = r.s_seq and
+		        r.answer = '3'
+		    ) c3,
+		    (
+		    select count(*) from sresult r 
+		    where 
+		        d.survey_id = r.survey_id and
+		        d.s_seq = r.s_seq and
+		        r.answer = '4'
+		    ) c4
+		from sdetail d
+		where 
+		    d.survey_id = :1
+	</select>
+	
+	<update id="merge">
+		MERGE INTO sresult
+		    USING DUAL
+			ON (SURVEY_ID = :1 and S_SEQ = :2 and ST_MOBILE = :3 )
+			WHEN MATCHED THEN
+		        UPDATE SET
+		        ANSWER = :4
+			WHEN NOT MATCHED THEN
+				INSERT (
+					survey_id, 
+					s_seq, 
+					st_mobile, 
+					answer
+				) 
+				VALUES (
+					:1,
+					:2,
+					:3,
+					:4
+				)
+	</update>	
+	
+	
+	<update id="insert">
+		insert into sresult 
+		(
+			survey_id, 
+			s_seq, 
+			st_mobile, 
+			answer, 
+			in_date, 
+			in_user_id, 
+			up_date, 
+			up_user_id
+		) 
+		values
+		(
+			:1, 
+			:2, 
+			:3, 
+			:4,  
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			:5, 
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			:6
+		)
+	</update>
+	<update id="update">
+		update 
+			sresult 
+		set 
+			answer				=:1, 
+			up_date				= to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			up_user_id			=:2
+		where 
+			survey_id=:3 and s_seq=:4 and st_mobile=:5
+	</update>
+	<update id="delete">
+		delete from sresult where survey_id = :1 and s_seq= :2 and st_mobile=:3
+	</update>
+</mapper>

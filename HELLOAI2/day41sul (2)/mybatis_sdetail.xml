@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Test">
+	<select id="select">
+		SELECT 
+			survey_id, 
+			s_seq, 
+			question, 
+			a1, 
+			a2, 
+			a3, 
+			a4, 
+			in_date, 
+			in_user_id, 
+			up_date, 
+			up_user_id,
+			(select user_name from suser u where u.user_id = d.in_user_id) in_user_name
+ 		from 
+ 			sdetail d
+ 		where 
+ 			survey_id = :1
+	</select>
+	<update id="insert">
+		insert into sdetail 
+		(
+			survey_id, 
+			s_seq, 
+			question, 
+			a1, 
+			a2, 
+			a3, 
+			a4, 
+			in_date, 
+			in_user_id, 
+			up_date, 
+			up_user_id
+		) 
+		values
+		(
+			:1, 
+			:2, 
+			:3, 
+			:4, 
+			:5,
+			:6,
+			:7, 
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			:8, 
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			:9
+		)
+	</update>
+	<update id="update">
+		update 
+			sdetail 
+		set 
+			question			=:1, 
+			a1					=:2, 
+			a2					=:3, 
+			a3					=:4, 
+			a4					=:5, 
+			up_date				= to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			up_user_id			=:6 
+		where 
+			survey_id=:7 and s_seq=:8
+	</update>
+	<update id="delete">
+		delete from sdetail where survey_id = :7 and s_seq= :8
+	</update>
+</mapper>

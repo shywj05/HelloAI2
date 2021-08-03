@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+<script type="text/javascript" src="jqplot/jquery.min.js"></script>
+<!-- http://www.jqplot.com 제공 자바스크립트 include -->
+<script type="text/javascript" src="jqplot/jquery.jqplot.js"></script>
+<script type="text/javascript" src="jqplot/plugins/jqplot.barRenderer.js"></script>
+<script type="text/javascript" src="jqplot/plugins/jqplot.pointLabels.js"></script>
+<script type="text/javascript" src="jqplot/plugins/jqplot.categoryAxisRenderer.js"></script>
+<link rel="stylesheet" type="text/css" href="jqplot/jquery.jqplot.css" />
+<script type="text/javascript">
+$(document).ready(function(){
+	var cnt_1234 ;
+    var ans_1234 ;
+
+    {% for i, s in enumerate(list) %}
+    cnt_1234 = [{{s.c1}}, {{s.c2}}, {{s.c3}}, {{s.c4}}];
+    ans_1234 = ['{{s.a1}}', '{{s.a2}}', '{{s.a3}}', '{{s.a4}}']; 
+    $('.mychart').eq({{i}}).jqplot([cnt_1234], {
+        seriesDefaults:{
+            renderer:$.jqplot.BarRenderer,
+            rendererOptions: { barWidth: 25 },
+            pointLabels: { show: true, formatString: '%d' }
+        },
+        axes:{
+            xaxis:{
+                renderer: $.jqplot.CategoryAxisRenderer,
+                ticks: ans_1234
+            }
+        }
+    });
+    {% endfor %}
+
+
+});
+</script>
+
+
+{% for s in list %}
+{{s.s_seq}}.{{s.question}}
+<div class="mychart" style="height:150px;width:300px; "></div>
+{% endfor %}
+
+
+{% endblock %}
+

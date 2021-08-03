@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link rel="stylesheet" href="js/jquery-ui.css">
+<link rel="stylesheet" href="css/common.css">
+<script src="js/jquery-3.5.1.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script type = "text/javascript">
+function fn_logout(){
+	var flag_ok = confirm("로그아웃 하시겠습니까?");
+	if(flag_ok){
+		location.href = "logout"
+	}
+}
+
+
+</script>
+</head>
+<body>
+
+<a href="main">메인화면</a>
+<a href="suser">사용자관리</a>
+<a href="survey">설문관리</a>
+<a href="snotice_list">게시판</a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+{% if session.user_id %}
+{{session.user_name}}님 환영합니다.
+<a href="javascript:fn_logout()">로그아웃</a>
+{% else %}
+<a href="login.html">로그인</a>
+{% endif %}
+
+<br/>
+
+
+
+
+
+
+
+{% block content %}{% endblock %}
+
+
+<br/>	
+all right reserved by aimaker.kr
+</body>
+</html>

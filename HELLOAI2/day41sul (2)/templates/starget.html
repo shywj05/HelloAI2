@@ -1,0 +1,223 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+<script type="text/javascript">
+	function setData(survey_id, st_mobile, complete_yn, in_date, in_user_id, up_date, up_user_id) {
+		$("#survey_id").val(survey_id);
+		$("#st_mobile").val(st_mobile);
+		$("#complete_yn").val(complete_yn);
+		$("#in_date").val(in_date);
+		$("#in_user_id").val(in_user_id);
+		$("#up_date").val(up_date);
+		$("#up_user_id").val(up_user_id);
+	}
+	
+	function fn_add() {
+
+		var survey_id = $("#survey_id").val();
+		var st_mobile = $("#st_mobile").val();
+		var complete_yn = $("#complete_yn").val();
+		var in_date = $("#in_date").val();
+		var in_user_id = $("#in_user_id").val();
+		var up_date = $("#up_date").val();
+		var up_user_id = $("#up_user_id").val();
+
+
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&survey_id=" + survey_id
+		param += "&st_mobile=" + st_mobile
+		param += "&complete_yn=" + complete_yn
+		param += "&in_date=" + in_date
+		param += "&in_user_id=" + in_user_id
+		param += "&up_date=" + up_date
+		param += "&up_user_id=" + up_user_id
+
+		
+
+
+		$.ajax({
+			url : "starget_ins.ajax",
+			data : param,
+			dataType : "json",
+			type : "post",
+			async : false,
+			statusCode : {
+				404 : function() {
+					alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+				}
+			},
+			success : function(data) {
+				if(data.msg == "ok"){
+					location.reload();
+				} else{
+					alert("추가 도중 문제가 생겼습니다")
+				}
+				console.log(data.msg)
+			}
+		});
+	}
+
+	
+ 	function fn_upd() {
+
+		var survey_id = $("#survey_id").val();
+		var st_mobile = $("#st_mobile").val();
+		var complete_yn = $("#complete_yn").val();
+		var in_date = $("#in_date").val();
+		var in_user_id = $("#in_user_id").val();
+		var up_date = $("#up_date").val();
+		var up_user_id = $("#up_user_id").val();
+
+
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&survey_id=" + survey_id
+		param += "&st_mobile=" + st_mobile
+		param += "&complete_yn=" + complete_yn
+		param += "&in_date=" + in_date
+		param += "&in_user_id=" + in_user_id
+		param += "&up_date=" + up_date
+		param += "&up_user_id=" + up_user_id
+		
+		
+		$.ajax({
+			url : "starget_upd.ajax",
+			data : param,
+			dataType : "json",
+			type : "post",
+			async : false,
+			statusCode : {
+				404 : function() {
+					alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+				}
+			},
+			success : function(data) {
+				if(data.msg == "ok"){
+					location.reload();
+				} else{
+					alert("수정 도중 문제가 생겼습니다")
+				}
+			}
+		});
+	}
+
+
+	function fn_del() {
+
+		var survey_id = $("#survey_id").val();
+		var st_mobile = $("#st_mobile").val();
+
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&survey_id=" + survey_id
+		param += "&st_mobile=" + st_mobile
+
+		$.ajax({
+			url : "starget_del.ajax",
+			data : param,
+			dataType : "json",
+			type : "post",
+			async : false,
+			statusCode : {
+				404 : function() {
+					alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+				}
+			},
+			success : function(data) {
+				if(data.msg == "ok"){
+					location.reload();
+				} else{
+					alert("삭제 도중 문제가 생겼습니다")
+				}
+			}
+		});
+	}
+	
+	var survey_id = '{{survey_id}}';
+	var mywin;
+	function fn_xls(){
+		mywin=window.open("starget_form?survey_id="+survey_id, "엑셀일괄입력", "height=100,width=200,resizable=yes");  
+	}
+	
+</script>
+
+
+
+<table border="1">
+<tr>
+<td class="uupp" width="600px" >
+	<table  class="scrolltbody">
+		<thead>
+			<tr>
+				<th>survey_id</th>
+				<th>st_mobile</th>
+				<th>complete_yn</th>
+				<th>in_date</th>
+				<th>in_user_id</th>
+				<th>up_date</th>
+				<th>up_user_id</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for s in list %}
+		<tr>
+			<td><a href="javascript:setData('{{s.survey_id}}','{{s.st_mobile}}','{{s.complete_yn}}','{{s.in_date}}','{{s.in_user_id}}','{{s.up_date}}','{{s.up_user_id}}')">{{s.survey_id}}</a></td>
+			<td>{{s.st_mobile}}</td>
+			<td>{{s.complete_yn}}</td>
+			<td>{{s.in_date}}</td>
+			<td>{{s.in_user_id}}</td>
+			<td>{{s.up_date}}</td>
+			<td>{{s.up_user_id}}</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+</td>
+<td>
+	<table border="1">
+		<tr>
+			<td>survey_id</td>
+			<td><input type="text" id="survey_id" value="{{survey_id}}" readonly ></td>
+		</tr>
+		<tr>
+			<td>st_mobile</td>
+			<td><input type="text" id="st_mobile"></td>
+		</tr>
+		<tr>
+			<td>complete_yn</td>
+			<td><input type="text" id="complete_yn" value="n"></td>
+		</tr>
+		<tr>
+			<td>in_date</td>
+			<td><input type="text" id="in_date"></td>
+		</tr>
+		<tr>
+			<td>in_user_id</td>
+			<td><input type="text" id="in_user_id"></td>
+		</tr>
+		<tr>
+			<td>up_date</td>
+			<td><input type="text" id="up_date"></td>
+		</tr>
+		<tr>
+			<td>up_user_id</td>
+			<td><input type="text" id="up_user_id"></td>
+		</tr>
+
+		<tr>
+			<td colspan="2">
+			<input type="button" value="추가" onclick="fn_add()"> 
+			<input type="button" value="수정" onclick="fn_upd()"> 
+			<input type="button" value="삭제" onclick="fn_del()">
+			<input type="button" value="엑셀업로드" onclick="fn_xls()">
+			</td>
+		</tr>
+	</table>
+</td>
+</tr>
+</table>
+
+{% endblock %}
+

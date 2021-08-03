@@ -1,0 +1,255 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+<script type="text/javascript">
+	function setData(survey_id, s_seq, question, a1, a2, a3, a4, in_date, in_user_id, up_date, up_user_id) {
+		$("#survey_id").val(survey_id);
+		$("#s_seq").val(s_seq);
+		$("#question").val(question);
+		$("#a1").val(a1);
+		$("#a2").val(a2);
+		$("#a3").val(a3);
+		$("#a4").val(a4);
+		$("#in_date").val(in_date);
+		$("#in_user_id").val(in_user_id);
+		$("#up_date").val(up_date);
+		$("#up_user_id").val(up_user_id);
+	}
+	
+	function fn_add() {
+
+		var survey_id = $("#survey_id").val();
+		var s_seq = $("#s_seq").val();
+		var question = $("#question").val();
+		var a1 = $("#a1").val();
+		var a2 = $("#a2").val();
+		var a3 = $("#a3").val();
+		var a4 = $("#a4").val();
+		var in_date = $("#in_date").val();
+		var in_user_id = $("#in_user_id").val();
+		var up_date = $("#up_date").val();
+		var up_user_id = $("#up_user_id").val();
+
+
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&survey_id=" + survey_id
+		param += "&s_seq=" + s_seq
+		param += "&question=" + question
+		param += "&a1=" + a1
+		param += "&a2=" + a2
+		param += "&a3=" + a3
+		param += "&a4=" + a4
+		param += "&in_date=" + in_date
+		param += "&in_user_id=" + in_user_id
+		param += "&up_date=" + up_date
+		param += "&up_user_id=" + up_user_id
+
+		
+
+
+		$.ajax({
+			url : "sdetail_ins.ajax",
+			data : param,
+			dataType : "json",
+			type : "post",
+			async : false,
+			statusCode : {
+				404 : function() {
+					alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+				}
+			},
+			success : function(data) {
+				if(data.msg == "ok"){
+					location.reload();
+				} else{
+					alert("추가 도중 문제가 생겼습니다")
+				}
+				console.log(data.msg)
+			}
+		});
+	}
+
+
+ 	function fn_upd() {
+
+		var survey_id = $("#survey_id").val();
+		var s_seq = $("#s_seq").val();
+		var question = $("#question").val();
+		var a1 = $("#a1").val();
+		var a2 = $("#a2").val();
+		var a3 = $("#a3").val();
+		var a4 = $("#a4").val();
+		var in_date = $("#in_date").val();
+		var in_user_id = $("#in_user_id").val();
+		var up_date = $("#up_date").val();
+		var up_user_id = $("#up_user_id").val();
+
+
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&survey_id=" + survey_id
+		param += "&s_seq=" + s_seq
+		param += "&question=" + question
+		param += "&a1=" + a1
+		param += "&a2=" + a2
+		param += "&a3=" + a3
+		param += "&a4=" + a4
+		param += "&in_date=" + in_date
+		param += "&in_user_id=" + in_user_id
+		param += "&up_date=" + up_date
+		param += "&up_user_id=" + up_user_id
+		
+		
+		$.ajax({
+			url : "sdetail_upd.ajax",
+			data : param,
+			dataType : "json",
+			type : "post",
+			async : false,
+			statusCode : {
+				404 : function() {
+					alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+				}
+			},
+			success : function(data) {
+				if(data.msg == "ok"){
+					location.reload();
+				} else{
+					alert("수정 도중 문제가 생겼습니다")
+				}
+			}
+		});
+	}
+
+
+	function fn_del() {
+
+		var survey_id = $("#survey_id").val();
+		var s_seq = $("#s_seq").val();
+
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&survey_id=" + survey_id
+		param += "&s_seq=" + s_seq
+
+		$.ajax({
+			url : "sdetail_del.ajax",
+			data : param,
+			dataType : "json",
+			type : "post",
+			async : false,
+			statusCode : {
+				404 : function() {
+					alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+				}
+			},
+			success : function(data) {
+				if(data.msg == "ok"){
+					location.reload();
+				} else{
+					alert("삭제 도중 문제가 생겼습니다")
+				}
+			}
+		});
+	}
+	
+</script>
+
+
+
+
+<table border="1">
+<tr>
+<td class="uupp" width="600px" >
+	<table  class="scrolltbody">
+		<thead>
+			<tr>
+				<th>설문번호</th>
+				<th>질문</th>
+				<th>1번</th>
+				<th>2번</th>
+				<th>3번</th>
+				<th>4번</th>
+				<th>입력날짜</th>
+				<th>입력자</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for s in list %}
+		<tr>
+			<td><a href="javascript:setData('{{s.survey_id}}','{{s.s_seq}}','{{s.question}}','{{s.a1}}','{{s.a2}}','{{s.a3}}','{{s.a4}}','{{s.in_date}}','{{s.in_user_id}}','{{s.up_date}}','{{s.up_user_id}}')">{{s.s_seq}}</a></td>
+			<td>{{s.question}}</td>
+			<td>{{s.a1}}</td>
+			<td>{{s.a2}}</td>
+			<td>{{s.a3}}</td>
+			<td>{{s.a4}}</td>
+			<td>{{s.in_date}}</td>
+			<td>{{s.in_user_name}}</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+</td>
+<td>
+	<table border="1">
+		<tr>
+			<td>설문아이디</td>
+			<td><input type="text" id="survey_id" readonly value="{{survey_id}}"></td>
+		</tr>
+		<tr>
+			<td>설문번호</td>
+			<td><input type="text" id="s_seq"></td>
+		</tr>
+		<tr>
+			<td>질문</td>
+			<td><input type="text" id="question"></td>
+		</tr>
+		<tr>
+			<td>1번</td>
+			<td><input type="text" id="a1"></td>
+		</tr>
+		<tr>
+			<td>2번</td>
+			<td><input type="text" id="a2"></td>
+		</tr>
+		<tr>
+			<td>3번</td>
+			<td><input type="text" id="a3"></td>
+		</tr>
+		<tr>
+			<td>4번</td>
+			<td><input type="text" id="a4"></td>
+		</tr>
+		<tr>
+			<td>등록일시</td>
+			<td><input type="text" id="in_date"></td>
+		</tr>
+		<tr>
+			<td>등록자</td>
+			<td><input type="text" id="in_user_id"></td>
+		</tr>
+		<tr>
+			<td>수정일시</td>
+			<td><input type="text" id="up_date"></td>
+		</tr>
+		<tr>
+			<td>수정자</td>
+			<td><input type="text" id="up_user_id"></td>
+		</tr>
+
+		<tr>
+			<td colspan="2">
+			<input type="button" value="추가" onclick="fn_add()"> 
+			<input type="button" value="수정" onclick="fn_upd()"> 
+			<input type="button" value="삭제" onclick="fn_del()">
+			</td>
+		</tr>
+	</table>
+</td>
+</tr>
+</table>
+
+{% endblock %}
+

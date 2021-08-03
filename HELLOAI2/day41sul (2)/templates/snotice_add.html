@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+	});
+
+	function fn_list(){
+		location.href="snotice_list"
+	}
+	function fn_mod(){
+		document.frm.submit();
+	}
+
+
+	
+</script>
+<form name="frm" action="snotice_addact" method="post" enctype="multipart/form-data">
+<table border="1px">
+
+	<tr>
+		<th>공지번호</th>		<td>자동생성</td>
+	</tr>
+	<tr>
+		<th>제목</th>			
+		<td>
+			<input type="text" name="title" value="">
+		</td>
+	</tr>
+	<tr>
+		<th>표시여부</th>		
+		<td>
+			<input type="radio" name="display_yn" value="y">표시
+			<input type="radio" name="display_yn" value="n">비표시
+		</td>
+	</tr>
+	<tr>
+		<th>내용</th>			
+		<td>
+			<textarea name="content" rows="9" cols="20"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<th>첨부파일</th>			
+		<td>
+		<input type="file" name="file" /> 
+		</td>
+	</tr>	
+
+	<tr>
+		<td colspan="2">
+			<input type="button" onclick="fn_list()" value="목록" /> 
+			<input type="button" onclick="fn_mod()" value="수정완료" /> 
+		</td>			
+
+	</tr>
+
+</table>
+</form>
+{% endblock %}
+

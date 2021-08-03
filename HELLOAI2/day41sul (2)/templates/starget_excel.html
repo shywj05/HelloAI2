@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script type="text/javascript">
+	var cnt = '{{cnt}}';
+
+	if (cnt == '0') {
+		history.back();
+	} else {
+		window.opener.location.reload();
+		window.close()
+	}
+</script>
+</head>
+<body>엑셀이 정상적으로 처리되었습니다.
+</body>
+</html>

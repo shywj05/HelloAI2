@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<script>
+var block = {
+	'type' : 1,
+	'status' : 1,
+	'i' : 4,
+	'j' : 4,
+}
+
+var block2D = [
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0]
+]
+
+var stack2D = [
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0]
+]
+
+var scrin2D = [
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0],
+	[0,0,0,0,0, 0,0,0,0,0]
+]
+
+
+window.addEventListener("keydown", (e) => {
+	/* console.log(e.key); */
+	myclick(e.key)
+});
+
+function myclick(key){
+	var bak_type 	= block.type;
+	var bak_status 	= block.status;
+	var bak_i 		= block.i;
+	var bak_j 		= block.j;
+	
+	var flag_down = false;
+	
+	
+	if(key == "ArrowUp"){
+		changeStatus();
+	}  
+	
+	if(key == "ArrowDown"){
+		block.i++;
+		flag_down = true;
+	}
+	
+	if(key == "ArrowRight"){
+		block.j++;
+	}
+	
+	if(key == "ArrowLeft"){
+		block.j--;
+	}  
+	
+	var flag_collision_bottom = false; 
+		
+	try {
+		setBlock2D();
+	} catch (e) {
+		var flag_collision_bottom = false;
+	}
+	
+	var flag_collision = isCollision();
+	console.log("충돌"+flag_collision);
+	console.log("바닥충돌"+flag_collision_bottom);
+	if(flag_collision_bottom || flag_collision) {
+		block.type 	= bak_type;
+		block.status 	= bak_status;
+		block.i 		= bak_i;
+		block.j 		= bak_j;
+		setBlock2D();
+		
+		if(flag_down){
+			moveBlock2D();
+			clear10();
+			console.log(stack2D)
+			block.type 		= Math.floor(Math.random()*6)+1;
+			block.status 	= 1;
+			block.i 		= 4;
+			block.j 		= 4;
+		
+			setBlock2D();
+		}
+	}
+	scrin2DFromSB();
+	myrender();
+}
+
+function clear10(){
+	var resetArr = [];
+	for(i = 0; i < 20; i++){
+		if(stack2D[i].includes(0)){//stack2D의 리스트안에서 includes(찾고자하는 값)을 찾는다. boolean값
+			resetArr.push(stack2D[i]);			
+		}else{
+			resetArr.unshift([0,0,0,0,0,0,0,0,0,0]);//unshift는 새로운 요소를 배열의 맨 앞쪽에 추가
+		}
+	}
+	stack2D = resetArr;
+}
+
+function moveBlock2D(){
+	//반복문 돌면서 블럭에 0보다 크면 스택으로 이동
+	for(i = 0; i < 20; i++){
+		var answer = 0;
+		for(j = 0; j < 10; j++){
+			if(block2D[i][j] > 0){
+				stack2D[i][j] = block2D[i][j]+10;
+			}
+		}
+		
+	}
+}
+
+
+function isCollision(){
+	var cnt = 0;
+	for(i = 0; i < 20; i++){
+		for(j = 0; j < 10; j++){
+			if(block2D[i][j] > 0){
+				cnt++;
+			}
+		}
+	}
+	
+	if(cnt < 4){
+		return true;
+	}
+	
+	for(i = 0; i < 20; i++){
+		for(j = 0; j < 10; j++){
+			if(block2D[i][j] > 0 && stack2D[i][j] > 0){
+				return true;
+			}
+		}
+	}
+	
+	
+	return false;
+}
+
+function changeStatus(){
+	if(block.type == 2 || block.type == 3 || block.type == 4){
+		if(block.status == 1){
+			block.status = 2;
+		}else if(block.status == 2){
+			block.status = 1;
+		}
+	}
+	if(block.type == 5 || block.type == 6 || block.type == 7){
+		if(block.status == 1){
+			block.status = 2;
+		}else if(block.status == 2){
+			block.status = 3;
+		}else if(block.status == 3){
+			block.status = 4;
+		}else if(block.status == 4){
+			block.status = 1;
+		}
+	}
+}
+
+function scrin2DFromSB(){
+	for(i = 0; i < scrin2D.length; i++){
+		for(j = 0; j < scrin2D[i].length; j++){
+			scrin2D[i][j] = 0;
+		}
+	}
+	for(i = 0; i < stack2D.length; i++){
+		for(j = 0; j < stack2D.length; j++){
+			if(stack2D[i][j] > 0){
+				scrin2D[i][j] = stack2D[i][j];
+			}
+		}
+	}
+	for(i = 0; i < block2D.length; i++){
+		for(j = 0; j < block2D.length; j++){
+			if(block2D[i][j] > 0){
+				scrin2D[i][j] = block2D[i][j];
+			}
+		}
+	}
+}
+	
+
+function setBlock2D(){
+		for(i = 0; i < block2D.length; i++){
+			for(j = 0; j < block2D[i].length; j++){
+				block2D[i][j] = 0;
+			}
+		}
+	
+	if(block.type == 1){
+		block2D[block.i]	[block.j] 	= block.type
+		block2D[block.i]	[block.j+1]	= block.type
+		block2D[block.i+1]	[block.j]   = block.type
+		block2D[block.i+1]	[block.j+1] = block.type
+	}
+	if(block.type == 2){
+		if(block.status == 1){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i-1]	[block.j]	= block.type
+			block2D[block.i+1]	[block.j]   = block.type
+			block2D[block.i+2]	[block.j]   = block.type
+		}else if(block.status == 2){
+			block2D[block.i]	[block.j]	= block.type
+			block2D[block.i]	[block.j-1] = block.type
+			block2D[block.i]	[block.j+1] = block.type
+			block2D[block.i]	[block.j+2] = block.type
+		}
+	}
+	if(block.type == 3){
+		if(block.status == 1){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i-1]	[block.j] 	= block.type
+			block2D[block.i]	[block.j+1] = block.type
+			block2D[block.i+1]	[block.j+1] = block.type
+		}else if(block.status == 2){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i]	[block.j+1] = block.type
+			block2D[block.i+1]	[block.j] 	= block.type
+			block2D[block.i+1]	[block.j-1] = block.type
+		}
+	}
+	if(block.type == 4){
+		if(block.status == 1){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i]	[block.j+1]	= block.type
+			block2D[block.i-1]	[block.j+1]	= block.type
+			block2D[block.i+1]	[block.j] 	= block.type
+		}else if(block.status == 2){
+			block2D[block.i]	[block.j]	= block.type
+			block2D[block.i]	[block.j-1]	= block.type
+			block2D[block.i+1]	[block.j]	= block.type
+			block2D[block.i+1]	[block.j+1]	= block.type
+		}
+	}
+	if(block.type == 5){
+		if(block.status == 1){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i]	[block.j-1]	= block.type
+			block2D[block.i]	[block.j+1] = block.type
+			block2D[block.i-1]	[block.j-1]	= block.type
+		}else if(block.status == 2){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i-1]	[block.j] 	= block.type
+			block2D[block.i-1]	[block.j+1]	= block.type
+			block2D[block.i+1]	[block.j]	= block.type
+		}else if(block.status == 3){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i]	[block.j-1]	= block.type
+			block2D[block.i]	[block.j+1] = block.type
+			block2D[block.i+1]	[block.j+1] = block.type
+		}else if(block.status == 4){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i-1]	[block.j] 	= block.type
+			block2D[block.i+1]	[block.j] 	= block.type
+			block2D[block.i+1]	[block.j-1]	= block.type
+		}
+	}
+	if(block.type == 6){
+		if(block.status == 1){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i]	[block.j-1]	= block.type
+			block2D[block.i]	[block.j+1] = block.type
+			block2D[block.i-1]	[block.j+1]	= block.type
+		}else if(block.status == 2){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i-1]	[block.j] 	= block.type
+			block2D[block.i+1]	[block.j]	= block.type
+			block2D[block.i+1]	[block.j+1]	= block.type
+		}else if(block.status == 3){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i]	[block.j-1]	= block.type
+			block2D[block.i]	[block.j+1] = block.type
+			block2D[block.i+1]	[block.j-1] = block.type
+		}else if(block.status == 4){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i-1]	[block.j] 	= block.type
+			block2D[block.i-1]	[block.j-1]	= block.type
+			block2D[block.i+1]	[block.j]	= block.type
+		}
+	}
+	if(block.type == 7){
+		if(block.status == 1){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i]	[block.j-1]	= block.type
+			block2D[block.i-1]	[block.j]   = block.type
+			block2D[block.i]	[block.j+1] = block.type
+		}else if(block.status == 2){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i-1]	[block.j] 	= block.type
+			block2D[block.i]	[block.j+1]	= block.type
+			block2D[block.i+1]	[block.j]	= block.type
+		}else if(block.status == 3){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i]	[block.j-1]	= block.type
+			block2D[block.i]	[block.j+1] = block.type
+			block2D[block.i+1]	[block.j] 	= block.type
+		}else if(block.status == 4){
+			block2D[block.i]	[block.j] 	= block.type
+			block2D[block.i-1]	[block.j] 	= block.type
+			block2D[block.i]	[block.j-1] = block.type
+			block2D[block.i+1]	[block.j] 	= block.type
+		}
+	}
+}
+
+function myrender() {
+
+    var canvas = document.getElementById("canvas");
+    if (canvas.getContext) {
+      var ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      /* 알파 오파 시티 트랜스페어런트 : 투명도 */
+      
+      for(i = 0; i < scrin2D.length ; i++){
+    	  for(j = 0; j < scrin2D.length; j++){
+    		  if(scrin2D[i][j] == 0){
+				ctx.fillStyle = "rgba(0, 0, 0, 0.1)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    		  if(scrin2D[i][j] == 1){
+    			ctx.fillStyle = "rgba(255, 0, 0, 0.5)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    		  if(scrin2D[i][j] == 2){
+    			ctx.fillStyle = "rgba(255, 100, 50, 0.5)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    		  if(scrin2D[i][j] == 3){
+    			ctx.fillStyle = "rgba(200, 255, 0, 0.5)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    		  if(scrin2D[i][j] == 4){
+    			ctx.fillStyle = "rgba(50, 150, 0, 0.5)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    		  if(scrin2D[i][j] == 5){
+    			ctx.fillStyle = "rgba(0, 50, 255, 0.5)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    		  if(scrin2D[i][j] == 6){
+    			ctx.fillStyle = "rgba(0, 0, 150, 0.5)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    		  if(scrin2D[i][j] == 7){
+    			ctx.fillStyle = "rgba(0, 0, 150, 0.5)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    		  
+    		  
+    		  if(scrin2D[i][j] == 11){
+				ctx.fillStyle = "rgba(255, 0, 0, 1)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    		  if(scrin2D[i][j] == 12){
+    			ctx.fillStyle = "rgba(255, 100, 50, 1)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    		  if(scrin2D[i][j] == 13){
+    			ctx.fillStyle = "rgba(200, 255, 0, 1)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    		  if(scrin2D[i][j] == 14){
+    			ctx.fillStyle = "rgba(50, 150, 0, 1)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    		  if(scrin2D[i][j] == 15){
+    			ctx.fillStyle = "rgba(0, 50, 255, 1)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    		  if(scrin2D[i][j] == 16){
+    			ctx.fillStyle = "rgba(0, 0, 150, 1)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    		  if(scrin2D[i][j] == 17){
+    			ctx.fillStyle = "rgba(0, 0, 150, 1)"
+				ctx.fillRect (j * 20, i * 20, 19, 19);
+    		  }
+    	  }
+      }
+    }
+}
+
+
+</script>
+</head>
+<body onload="myrender()">
+	클리어갯수 :
+	<div id="div_clear">10</div>
+	<canvas id="canvas" width="200px" height="400px"></canvas>
+</body>
+</html>

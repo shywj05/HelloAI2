@@ -1,0 +1,67 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+	});
+	
+	function fn_detail(b_seq){
+		location.href="snotice_detail?b_seq="+b_seq;
+	}
+	
+	function fn_add(){
+		location.href="snotice_add";
+	}
+	
+	function fn_search(){
+		var search = $("#search").val();
+		location.href="snotice_list?search="+search;
+	}
+	
+	function fn_keypress(e){
+		if(e.key == "Enter"){
+			fn_search();
+		}
+	}
+	
+</script>
+<input type="text" id="search" value="{{search}}" onkeypress="fn_keypress(event)" >
+<input type="button" onclick="fn_search()" value="검색" >
+<input type="button" value="글쓰기" onclick="fn_add()" />
+<table  class="scrolltbody">
+	<thead>
+		<tr>
+			<th>공지번호</th>
+			<th>제목</th>
+			<th>작성자</th>
+			<th>작성일시</th>
+			<th>파일</th>
+			<th>표시여부</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for s in list %}
+		<tr>
+			<td>{{s.b_seq}}</td>
+			<td><a href="javascript:fn_detail('{{s.b_seq}}')">{{s.title}}</a></td>
+			<td>{{s.in_user_name}}</td>
+			<td>{{s.in_date}}</td>
+			<td>
+			{% if s.attach_file %}
+			O
+			{% else %}
+			X
+			{% endif %}
+			</td>
+			<td>{{s.display_yn}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}
+

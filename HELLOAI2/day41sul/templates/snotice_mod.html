@@ -1,0 +1,115 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+	});
+
+	function fn_list(){
+		location.href="snotice_list"
+	}
+	function fn_mod(){
+		document.frm.submit();
+	}
+	
+	function fn_del_ajax(){
+	
+		var b_seq = $("input[name=b_seq]").val();
+
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&b_seq=" + b_seq;
+
+		$.ajax({
+			url : "snotice_del.ajax",
+			data : param,
+			dataType : "json",
+			type : "post",
+			async : false,
+			statusCode : {
+				404 : function() {
+					alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+				}
+			},
+			success : function(data) {
+				if(data.msg == "ok"){
+					alert("tk");
+					location.href = "snotice_mod?b_seq={{notice.b_seq}}&dummy=" + Math.random();
+				} else{
+					alert("삭제 도중 문제가 생겼습니다")
+				}
+			}
+		});
+	}
+
+	
+</script>
+<form name="frm" action="snotice_modact" method="post"  enctype="multipart/form-data">
+<input type="hidden" name="b_seq" value="{{notice.b_seq}}">
+<input type="hidden" name="attach_path" value="{{notice.attach_path}}">
+<input type="hidden" name="attach_file" value="{{notice.attach_file}}">
+<table border="1px">
+
+	<tr>
+		<th>공지번호</th>		<td>{{notice.b_seq}}</td>
+	</tr>
+	<tr>
+		<th>제목</th>			
+		<td>
+			<input type="text" name="title" value="{{notice.title}}">
+		</td>
+	</tr>
+	<tr>
+		<th>표시여부</th>		
+		<td>
+			<input type="text" name="display_yn" value="{{notice.display_yn}}">
+		</td>
+	</tr>
+	<tr>
+		<th>내용</th>			
+		<td>
+			<textarea name="content" rows="9" cols="20">{{notice.content}}</textarea>
+		</td>
+	</tr>
+	<tr>
+		<th>첨부파일</th>			
+		<td>
+		
+{% if notice.attach_file %}		
+<input type="file" name="file" />	
+<a href="javascript:fn_del_ajax()">{{notice.attach_file}} X </a>
+{% else %}
+<input type="file" name="file" />
+{% endif %}	
+		
+		</td>
+	</tr>	
+	<tr>
+		<th>조회수</th>			
+		<td>{{notice.hit}}</td>
+	</tr>
+	<tr>
+		<th>작성자</th>			
+		<td>{{notice.in_user_name}}</td>
+	</tr>
+	<tr>
+		<th>작성일자</th>			
+		<td>{{notice.in_date}}</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<input type="button" onclick="fn_list()" value="목록" /> 
+			<input type="submit">
+			<input type="button" onclick="fn_mod()" value="수정완료" /> 
+		</td>			
+
+	</tr>
+
+</table>
+</form>
+{% endblock %}
+

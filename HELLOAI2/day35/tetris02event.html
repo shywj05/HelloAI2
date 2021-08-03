@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<script type="application/javascript">
+	
+window.addEventListener("keydown", (e) => {
+	/* console.log(e.key); */
+	if(e.key == "ArrowUp"){
+		console.log("Up");
+	}  
+	if(e.key == "ArrowRight"){
+		console.log("Right");
+	}  
+	if(e.key == "ArrowDown"){
+		console.log("Down");
+	}  
+	if(e.key == "ArrowLeft"){
+		console.log("Left");
+	}  
+
+})
+
+
+</script>
+</head>
+<body onload="draw()">
+	<canvas id="canvas" width="150" height="150"></canvas>
+</body>
+</html>

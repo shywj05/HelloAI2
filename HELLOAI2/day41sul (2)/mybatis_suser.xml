@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Test">
+	<select id="select">
+		SELECT 
+			USER_ID, 
+			PWD, 
+			USER_NAME, 
+			MOBILE, 
+			EMAIL, 
+			BIRTH, 
+			IN_DATE, 
+			IN_USER_ID, 
+			UP_DATE, 
+			UP_USER_ID
+		from 
+			suser
+		order by user_id desc
+	</select>
+	
+	<select id="select_dupl">
+		SELECT 
+			USER_ID, 
+			PWD, 
+			USER_NAME, 
+			MOBILE, 
+			EMAIL, 
+			BIRTH, 
+			IN_DATE, 
+			IN_USER_ID, 
+			UP_DATE, 
+			UP_USER_ID
+		from 
+			suser
+		where 
+			USER_ID=:1
+	</select>
+	
+	<select id="select_login">
+		SELECT 
+			USER_ID, 
+			PWD, 
+			USER_NAME, 
+			MOBILE, 
+			EMAIL, 
+			BIRTH, 
+			IN_DATE, 
+			IN_USER_ID, 
+			UP_DATE, 
+			UP_USER_ID
+		from 
+			suser
+		where 
+			USER_ID=:1 and
+			PWD=:2
+		
+	</select>
+	
+	<update id="insert">
+		insert into 
+		suser
+		(
+			USER_ID, 
+			PWD, 
+			USER_NAME, 
+			MOBILE, 
+			EMAIL, 
+			BIRTH, 
+			IN_DATE, 
+			IN_USER_ID, 
+			UP_DATE, 
+			UP_USER_ID
+		) 
+		values
+		(
+			:1, 
+			:2, 
+			:3, 
+			:4, 
+			:5, 
+			:6, 
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'),  
+			:7, 
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'),  
+			:8
+		)
+	</update>
+	<update id="update">
+		update 
+			suser 
+		set 
+			PWD=:1, 
+			USER_NAME=:2, 
+			MOBILE=:3, 
+			EMAIL=:4, 
+			BIRTH=:5, 
+			UP_DATE=to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			UP_USER_ID=:6 
+		where 
+			USER_ID=:7
+	</update>
+	<update id="delete">
+		delete from suser where USER_ID = :1
+	</update>
+</mapper>

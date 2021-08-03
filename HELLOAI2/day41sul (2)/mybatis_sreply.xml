@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Test">
+
+	<select id="select">
+		SELECT 
+			r_seq, 
+			b_seq, 
+			cmt, 
+			in_date, 
+			in_user_id, 
+			up_date, 
+			up_user_id,
+			(select user_name from suser u where u.user_id = r.in_user_id) in_user_name,
+			good,
+			bad
+ 		from 
+ 			sreply r
+ 		where 
+ 			b_seq = :1
+ 		order by 
+ 			r_seq desc
+	</select>
+	<update id="insert">
+		insert into sreply 
+		(
+			r_seq,
+			b_seq, 
+			cmt, 
+			in_date, 
+			in_user_id, 
+			up_date, 
+			up_user_id
+		) 
+		values
+		(
+			reply_seq.NEXTVAL,
+			:1, 
+			:2,  
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			:3, 
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			:4
+		)
+	</update>
+	<update id="update">
+		update 
+			sreply 
+		set 
+			cmt			=:1, 
+			up_date				= to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			up_user_id			=:2 
+		where 
+			r_seq=:3
+	</update>
+	
+	<update id="good">
+		update 
+			sreply 
+		set 
+			good = good+1
+		where 
+			r_seq=:1
+	</update>
+	
+	<update id="bad">
+		update 
+			sreply 
+		set 
+			bad	= bad+1
+		where 
+			r_seq=:1
+	</update>
+	
+	<update id="delete">
+		delete from sreply where r_seq=:1
+	</update>
+</mapper>
+
